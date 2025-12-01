@@ -1,0 +1,85 @@
+Перегрузка операций. Операция сравнения.
+
+В Python можно переопределить методы для операторов сравнения, чтобы они работали с вашими классами. 
+Для этого используются специальные методы (magic methods).
+
+Методы для операций сравнения:
+
+__eq__(self, other) - == (равно)
+
+__ne__(self, other) - != (не равно)
+
+__lt__(self, other) - < (меньше)
+
+__le__(self, other) - <= (меньше или равно)
+
+__gt__(self, other) - > (больше)
+
+__ge__(self, other) - >= (больше или равно)
+
+Пример 1:
+
+class Book:
+    def __init__(self, title: str, pages: int):
+        self.title = title
+        self.pages = pages
+    
+    def __eq__(self, other):
+        """Сравнение по количеству страниц == """
+        if not isinstance(other, Book):
+            return False
+        return self.pages == other.pages
+    
+    def __lt__(self, other):
+        """Сравнение по количеству страниц < """
+        if not isinstance(other, Book):
+            return NotImplemented
+        return self.pages < other.pages
+    
+    def __le__(self, other):
+        """Сравнение по количеству страниц <= """
+        if not isinstance(other, Book):
+            return NotImplemented
+        return self.pages <= other.pages
+    
+    def __repr__(self):
+        return f"Book('{self.title}', {self.pages})"
+
+book1 = Book("Python Basics", 300)
+book2 = Book("Advanced Python", 500)
+book3 = Book("Python Cookbook", 300)
+
+print(book1 == book3)  # True (300 == 300)
+print(book1 != book2)  # True (300 != 500)
+print(book1 < book2)   # True (300 < 500)
+print(book2 > book1)   # True (500 > 300)
+print(book1 <= book3)  # True (300 <= 300)
+
+Пример 2:
+
+class Point:
+    def __init__(self, x: int, y: int):
+        self.x = x
+        self.y = y
+    
+    def __eq__(self, other):
+        if not isinstance(other, Point):
+            return False
+        return self.x == other.x and self.y == other.y
+    
+    def __lt__(self, other):
+        if not isinstance(other, Point):
+            return NotImplemented
+        return (self.x, self.y) < (other.x, other.y)
+
+p1 = Point(1, 2)
+p2 = Point(3, 4)
+p3 = Point(1, 2)
+
+print(p1 == p3)  # True
+print(p1 != p2)  # True (автоматически из != not ==)
+print(p1 <= p2)  # True (автоматически из < or ==)
+
+Можно заметить, что в Примере 2 определены только __eq__ и __lt__, 
+но метод __le__ (меньше или равно) также работает.
+Python автоматически определит все остальные методы на основе __eq__ и __lt__.
